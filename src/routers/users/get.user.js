@@ -52,8 +52,8 @@ const getUserRouter = async (req, res, next) => {
   
       try {
     
-        const sqlGetAllUser = `select row_number() over() as rownumber, id, username, name, gender, email, password, role from users where role = "user" ${req.query.keywordUser} ${req.query.sortUser} ${req.query.pages};`;
-        const sqlCountUser = `SELECT COUNT(*) AS user_count FROM users where role = "user";`;
+        const sqlGetAllUser = `select row_number() over() as rownumber, id, username, name, gender, email, password, role, photo from users where role = "user" and username like '%${req.query.keyword || ''}%'  ${req.query.sortUser || ''} ${req.query.pages || ''};`;
+        const sqlCountUser = `SELECT COUNT(*) AS user_count FROM users where role = "user" and username like '%${req.query.keyword || ''}%'`;
     
         const [result] = await connection.query(sqlGetAllUser);
         const [userCount] = await connection.query(sqlCountUser)

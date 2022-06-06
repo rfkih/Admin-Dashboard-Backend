@@ -67,9 +67,30 @@ const getSumCompletedTransactionRouter = async (req, res, next) => {
     }
   };
 
+  //Get All Transaction
+  const getTransactionRouter = async (req, res, next) => {
+
+    const connection = await pool.promise().getConnection();
+  
+    try { 
+      
+      const sqlGetTransaction = `select row_number() over() as rownumber, id, invoice, user_id, transactionStatus, totalPrice, created_at from transaction where invoice like '%${req.query.keyword || ''}%' ${req.query.date || ''} ${req.query.status || ''}  ${req.query.isCustom || ''} ${req.query.sort || ''} ${req.query.pages || ''}`;
+      const sqlCountTransaction = `SELECT COUNT(*) AS count FROM transaction where invoice like '%${req.query.keyword || ''}%' ${req.query.date || ''} ${req.query.status || ''}  ${req.query.isCustom || ''} ${req.query.sortTransactions || ''} `;
+  
+      const [result] = await connection.query(sqlGetTransaction);
+      const [count] = await connection.query(sqlCountTransaction);
+      connection.release();
+      res.status(200).send({ result, count });
+    } catch (error) {
+      connection.release();
+      next(error);
+    }
+  };
+
 
 
 
   router.get("/completed", getSumCompletedTransactionRouter);
+  router.get("/", getTransactionRouter);
   
 module.exports = router;
