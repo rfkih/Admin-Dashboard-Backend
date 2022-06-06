@@ -11,11 +11,13 @@ const getProductRouter =  async (req, res, next) => {
   
       try {  
   
-        const sqlGetProducts = `select row_number() over() as rownumber, id, category_id, productName, productDetails, productIMG, isLiquid, price from products where isDeleted = 0 ${req.query.keyword || ''} ${req.query.sort || ''} ${req.query.pages || ''}`
+        const sqlGetProducts = `select row_number() over() as rownumber, id, category_id, productName, productDetails, productIMG, isLiquid, price from products where isDeleted = 0 and productName like '%${req.query.keyword || ''}%' ${req.query.sort || ''} ${req.query.pages || ''}`
         const sqlCountProducts = `SELECT COUNT(*) AS count FROM products where isDeleted = 0;`
-        const sqlGetProductsCategory = `select id, category_id, productName, productDetails, productIMG, isLiquid, price from products where category_id = ? && isDeleted = 0 ${req.query.keyword || ''}${req.query.sort || ''} ${req.query.pages || ''}`
+        const sqlGetProductsCategory = `select id, category_id, productName, productDetails, productIMG, isLiquid, price from products where category_id = ? && isDeleted = 0 and productName like '%${req.query.keyword || ''}%' ${req.query.sort || ''} ${req.query.pages || ''}`
         const sqlCountProductsCategory = `SELECT COUNT(*) AS count FROM products where category_id = ? && isDeleted = 0`
         const category_id = req.query.category
+
+      
         
         if (category_id) {
           const [result] = await connection.query(sqlGetProductsCategory, category_id);
