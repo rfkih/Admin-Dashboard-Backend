@@ -14,17 +14,13 @@ const putUpdateProductRouter =  async (req, res, next) => {
     try {
        
         const sqlUpdateProduct = `UPDATE products SET ? WHERE id = ?`;
-        
-        
+    
         const dataUpdateProduct = [req.body.updatedProduct, req.body.params.id]
-
         try {
            const result =  await connection.query(sqlUpdateProduct, dataUpdateProduct) 
-           
-           
+                   
             res.status(201).send({
-                message: `Produk berhasil di update`,
-                
+                message: `Produk berhasil di update`,               
             });
             connection.release();
 
