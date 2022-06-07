@@ -38,8 +38,54 @@ const getProductRouter =  async (req, res, next) => {
     };
 
 
+    // Get Product By Id
+
+    const getProductByIdRouter = async (req, res, next) => {
+
+      const connection = await pool.promise().getConnection()
+      
+      try {
+         
+        const sqlGetProductsById = `select id, category_id, productName, productDetails, productIMG, isLiquid, price from products WHERE id = ${req.params.productsId}`;
+        
+        const [result] = await connection.query(sqlGetProductsById);
+        
+        const  sqlGetCategoryById = `select id, categoryName from category where id = ${result[0].category_id || ''}`
+        const [category] = await connection.query(sqlGetCategoryById)
+        connection.release();
+    
+        res.status(200).send({result, category});
+      } catch (error) {
+        connection.release();
+        next(error)
+      }
+    };
 
 
+    const getDeletedProductRouter =  async (req, res, next) => {
+      const connection = await pool.promise().getConnection()
+      try {
+    
+        const sqlGetDeletedProducts = `select id, category_id, productName, productDetails, productIMG, isLiquid, isDeleted, price from products where isDeleted = 1 ${req.query.keyword} ${req.query.sort} ${req.query.pages}`;
+        const sqlCountDeletedProducts = `SELECT COUNT(*) AS count FROM products where isDeleted = 1 ${req.query.keyword} ${req.query.sort}`
+       
+        const [result] = await connection.query(sqlGetDeletedProducts);
+        const [count] = await connection.query(sqlCountDeletedProducts)
+  
+       
+        connection.release();
+    
+        res.status(200).send({result, count});
+      } catch (error) {
+        connection.release();
+        next(error)
+      }
+    };
+
+
+
+    router.get("/deleted", getDeletedProductRouter)
+    router.get("/:productsId", getProductByIdRouter)
     router.get("/", getProductRouter)
  
     module.exports = router;
