@@ -4,6 +4,8 @@ const { verify } = require("../../services/token");
 const pool = require("../../config/database");
 
 
+
+//Get All User
 const getUserRouter = async (req, res, next) => {
 
     const connection = await pool.promise().getConnection();
@@ -12,6 +14,26 @@ const getUserRouter = async (req, res, next) => {
   
       const sqlGetAllUser =
         "select id, username, gender, email, password, role from users;";
+  
+      const [result] = await connection.query(sqlGetAllUser);
+      connection.release();
+  
+      res.status(200).send(result);
+    } catch (error) {
+      connection.release();
+      next(error);
+    }
+  };
+
+  //Get User By Id
+  const getUserByIdRouter = async (req, res, next) => {
+
+    const connection = await pool.promise().getConnection();
+    
+    try {
+      console.log()
+      const sqlGetAllUser =
+        `select id, name, username, gender, email, password, role from users where id = ${req.params.userId};`;
   
       const [result] = await connection.query(sqlGetAllUser);
       connection.release();
@@ -71,5 +93,6 @@ const getUserRouter = async (req, res, next) => {
   router.get("/", getUserRouter);
   router.get("/verify", getVerifyRouter);
   router.get("/admin", getUserRouterAdmin);
+  router.get('/:userId', getUserByIdRouter)
 
   module.exports = router;
