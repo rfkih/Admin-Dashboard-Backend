@@ -6,9 +6,9 @@ const { verify } = require("../../services/token");
 const auth = (req, res, next) => {
     try {
       // bagaimana cara kita dapat tokennya ?
-      console.log({ header: req.headers });
+      
       const token = req.headers.authorization.replace("Bearer ", "");
-      console.log(token);
+      
       // verifiedToken = {id: 22, "iat": 1677783949}
   
       const verifiedToken = verify(token);

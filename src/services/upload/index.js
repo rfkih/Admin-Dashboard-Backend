@@ -10,10 +10,11 @@ const storageAvatar = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
+    console.log(file)
 
     cb(
       null,
-        "avatar"+"-" + req.user.username + path.extname(file.originalname)
+        "avatar"+ Date.now() + req.user.username + path.extname(file.originalname)
     );
   },
 });

@@ -14,7 +14,7 @@ const postRegisterUserRouter = async (req, res, next) => {
     
     try {
       
-        console.log(req.body);
+        
       const sqlPostUser = "Insert into users set ?";
       const dataAddUser = req.body;
       const isEmail = validator.isEmail(dataAddUser.email);

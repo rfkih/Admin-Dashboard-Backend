@@ -5,6 +5,12 @@ const pool = require("../../config/database");
 
 
 
+
+
+
+
+
+
 //Update Product
 
 const putUpdateProductRouter =  async (req, res, next) => {
