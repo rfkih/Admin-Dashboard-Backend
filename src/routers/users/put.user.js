@@ -3,7 +3,7 @@ require("dotenv").config();
 const router = require("express").Router();
 const pool = require("../../config/database");
 const bcrypt = require("bcryptjs");
-
+const validator = require("validator");
 const { sign, verify } = require("../../services/token")
 const auth = require("../../middleware/auth")
 const { uploadAvatar } = require("../../services/upload")
@@ -39,6 +39,11 @@ const putUpdateUserRouter =  async (req, res, next) => {
     const connection = await pool.promise().getConnection()
 
     try {
+
+        const isEmail = validator.isEmail(req.body.updatedUserData.email);
+
+        if (!isEmail){ return res.status(401).send({ message: "Format email salah" }); }
+        
        
         const sqlUpdateUsers = `UPDATE users SET ? WHERE id = ?`;
         console.log(req)
