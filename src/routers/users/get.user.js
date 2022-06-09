@@ -33,7 +33,7 @@ const getUserRouter = async (req, res, next) => {
     try {
       console.log()
       const sqlGetAllUser =
-        `select id, name, username, gender, email, password, role from users where id = ${req.params.userId};`;
+        `select id, name, username, gender, email, password, photo, role from users where id = ${req.params.userId};`;
   
       const [result] = await connection.query(sqlGetAllUser);
       connection.release();
