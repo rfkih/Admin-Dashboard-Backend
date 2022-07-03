@@ -38,7 +38,6 @@ const postRegisterUserRouter = async (req, res, next) => {
         },
       });
   
-      console.log(process.env.API_URL)
       connection.release();
       res.status(201).send({
         message: `Data dengan username: ${req.body.username} berhasil ditambahkan`,

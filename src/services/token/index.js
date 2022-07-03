@@ -5,6 +5,7 @@ const key = process.env.JWT_KEY;
 
 const sign = (data) => {
   const token = jwt.sign(data, key);
+ 
   return token;
 };
 

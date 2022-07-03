@@ -9,14 +9,12 @@ const auth = (req, res, next) => {
       
       const token = req.headers.authorization.replace("Bearer ", "");
       
-      // verifiedToken = {id: 22, "iat": 1677783949}
   
       const verifiedToken = verify(token);
   
       const sqlGetToken =
         "SELECT * FROM tokens WHERE user_id = ? AND tokens = ?;";
-      // userId = 22
-      // token = eYJhL
+    
       const dataGetToken = [verifiedToken.id, token];
   
       connection.query(sqlGetToken, dataGetToken, (err, tokens) => {

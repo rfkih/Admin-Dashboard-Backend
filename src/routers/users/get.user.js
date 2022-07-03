@@ -53,11 +53,17 @@ const getUserRouter = async (req, res, next) => {
     try {
   
       const verifiedToken = verify(req.query.token);
-  
+      console.log(verifiedToken)
       const sqlUpdateVerify = "UPDATE users SET isVerified = true WHERE id = ?";
       const dataVerify = verifiedToken.id;
-  
-      const [result] = await connection.query(sqlUpdateVerify, dataVerify);
+
+      const deleteToken = `DELETE FROM tokens WHERE tokens like '%${req.query.token}%' `;
+      
+      const [result] = await connection.query(deleteToken)
+        console.log(result)
+      await connection.query(sqlUpdateVerify, dataVerify);
+
+      
       connection.release();
   
       res.status(200).send(`<h1> Verification Success </h1> <br><a href="http://localhost:3000/login">Log in here</a>`  );

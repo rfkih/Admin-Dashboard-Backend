@@ -46,13 +46,20 @@ const putUpdateUserRouter =  async (req, res, next) => {
         
        
         const sqlUpdateUsers = `UPDATE users SET ? WHERE id = ?`;
-        console.log(req)
+        console.log(req.body)
     
         const dataUpdateUsers = [req.body.updatedUserData, req.body.params.id]
-        
+        console.log(req.body.updatedUserData)
+
+        const token = sign({ id: req.body.params.id });
+        const sqlInsertToken = `INSERT INTO tokens set ?;`;
+        const dataToken = { user_Id: req.body.params.id, tokens: token };
+
+        await connection.query(sqlInsertToken, dataToken);
         const result = await connection.query(sqlUpdateUsers, dataUpdateUsers)
 
-        res.status(201).send({
+        res.status(201).send( {
+            token,
             message:`Data User Telah di Update`
         })
         connection.release();
