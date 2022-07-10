@@ -8,7 +8,7 @@ const getStocksRouter = async (req, res, next) => {
     
     try {
        
-      const sqlGetStocks = `select A.id, A.productName, A.productIMG, A.isLiquid, B.categoryName, C.qtyBoxAvailable, C.qtyBottleAvailable, C.qtyStripsavailable, C.qtyBoxTotal, C.qtyStripsTotal, C.qtyBottleTotal 
+      const sqlGetStocks = `select row_number() over() as rownumber, A.id, A.productName, A.productIMG, A.isLiquid, B.categoryName, C.qtyBoxAvailable, C.qtyBottleAvailable, C.qtyStripsavailable, C.qtyBoxTotal, C.qtyStripsTotal, C.qtyBottleTotal 
       from products A, category B, stocks C 
       where A.category_id = B.id
       and  A.id = C.product_id;`;
