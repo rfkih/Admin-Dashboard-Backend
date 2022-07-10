@@ -11,6 +11,7 @@ const transactionDetailsRouter = require('./src/routers/transactionDetails')
 const transactionRouter = require('./src/routers/transaction')
 const productsRouter = require('./src/routers/products')
 const categoryRouter = require('./src/routers/categories')
+const stocksRotuer = require('./src/routers/stocks')
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -25,6 +26,7 @@ app.use("/transactiondetails", transactionDetailsRouter)
 app.use("/products", productsRouter)
 app.use("/transaction", transactionRouter)
 app.use("/categories", categoryRouter )
+app.use('/stocks', stocksRotuer)
 
 
 app.get("/", (req, res) => {
